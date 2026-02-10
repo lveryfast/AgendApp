@@ -1,0 +1,61 @@
+{
+    "translation": {
+        "home": {
+        "title": "Inicio",
+        "tasks": "Panel de Tareas",
+        "completed": "Completadas",
+        "pending": "Pendientes",
+        "events": "Eventos del Día",
+        "noEvents": "No hay eventos programados para hoy",
+        "noWeek": "No hay semanas creadas. Ve a Gestión para crear una."
+        },
+        "manage": {
+        "title": "Gestión",
+        "weeks": "Semanas",
+        "events": "Eventos",
+        "tasks": "Tareas",
+        "newWeek": "Nueva Semana",
+        "newEvent": "Nuevo Evento",
+        "newTask": "Nueva Tarea",
+        "save": "Guardar",
+        "cancel": "Cancelar",
+        "delete": "Eliminar",
+        "edit": "Editar",
+        "weekTitle": "Título de la semana",
+        "eventTitle": "Título del evento",
+        "description": "Descripción",
+        "startTime": "Inicio",
+        "endTime": "Fin",
+        "color": "Color",
+        "selectWeek": "Seleccionar semana",
+        "selectDay": "Seleccionar día"
+        },
+        "config": {
+        "title": "Configuración",
+        "language": "Idioma",
+        "spanish": "Español",
+        "english": "English",
+        "background": "Fondo de Pantalla",
+        "gallery": "Galería",
+        "camera": "Cámara",
+        "default": "Default",
+        "theme": "Tema",
+        "light": "Claro",
+        "dark": "Oscuro",
+        "auto": "Auto",
+        "adaptive": "Tema Adaptativo (IA)",
+        "adaptiveDesc": "Extrae paleta de colores de la imagen de fondo",
+        "about": "Acerca de",
+        "version": "Versión 1.0.0 • Offline Mode"
+        },
+        "days": {
+        "monday": "Lunes",
+        "tuesday": "Martes",
+        "wednesday": "Miércoles",
+        "thursday": "Jueves",
+        "friday": "Viernes",
+        "saturday": "Sábado",
+        "sunday": "Domingo"
+        }
+    }
+}
