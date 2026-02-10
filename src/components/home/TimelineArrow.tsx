@@ -9,18 +9,22 @@ interface TimelineArrowProps {
 export const TimelineArrow: React.FC<TimelineArrowProps> = ({isDark}) => {
     const {dayProgress} = useCurrentTime();
 
+    const clampedProgress = Math.max(0, Math.min(100, dayProgress));
+    
     const arrowColor: string = isDark ? '#60A5FA' : '#3B82F6';
 
     return (
         <View style={styles.container}>
-        <View style={styles.line}>
+        <View style={styles.lineContainer}>
+            <View style={[styles.line, {backgroundColor: isDark ? '#374151' : '#E5E7EB'}]} />
             <View
             style={[
-                styles.arrow,
-                {top: `${dayProgress}%`, borderRightColor: arrowColor},
+                styles.arrowContainer,
+                {top: `${clampedProgress}%`},
             ]}
             >
-            <Text style={[styles.arrowText, {color: arrowColor}]}>←</Text>
+            <View style={[styles.arrow, {borderLeftColor: arrowColor}]} />
+            <Text style={[styles.arrowText, {color: arrowColor}]}>◀</Text>
             </View>
         </View>
         <View style={styles.timeLabels}>
@@ -35,38 +39,44 @@ export const TimelineArrow: React.FC<TimelineArrowProps> = ({isDark}) => {
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
-        height: 200,
+        height: 300,
         marginVertical: 16,
         paddingHorizontal: 16,
     },
-    line: {
-        width: 2,
-        backgroundColor: '#E5E7EB',
-        marginRight: 16,
+    lineContainer: {
+        width: 40,
         position: 'relative',
-    },
-    arrow: {
-        position: 'absolute',
-        left: -6,
-        width: 0,
-        height: 0,
-        borderTopWidth: 6,
-        borderBottomWidth: 6,
-        borderRightWidth: 12,
-        borderTopColor: 'transparent',
-        borderBottomColor: 'transparent',
-        justifyContent: 'center',
         alignItems: 'center',
     },
-    arrowText: {
+    line: {
+        width: 2,
+        height: '100%',
+    },
+    arrowContainer: {
         position: 'absolute',
-        left: 8,
-        fontSize: 16,
+        left: 0,
+        flexDirection: 'row',
+        alignItems: 'center',
+        transform: [{translateY: -10}], // Centrar verticalmente
+    },
+    arrow: {
+        width: 0,
+        height: 0,
+        borderTopWidth: 8,
+        borderBottomWidth: 8,
+        borderLeftWidth: 12,
+        borderTopColor: 'transparent',
+        borderBottomColor: 'transparent',
+    },
+    arrowText: {
+        marginLeft: 4,
+        fontSize: 12,
         fontWeight: 'bold',
     },
     timeLabels: {
         justifyContent: 'space-between',
-        paddingVertical: 8,
+        paddingVertical: 0,
+        marginLeft: 8,
     },
     label: {
         fontSize: 12,

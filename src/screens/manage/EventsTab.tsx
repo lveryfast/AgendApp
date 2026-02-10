@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
     View,
     Text,
@@ -9,6 +9,9 @@ import {
     Alert,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import {useFocusEffect} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
+import {useApp} from '../../context/AppContext';
 import {Week} from '../../models/Week';
 import {Day} from '../../models/Day';
 import {Event} from '../../models/Event';
@@ -17,12 +20,11 @@ import {DayService} from '../../services/DayService';
 import {EventService} from '../../services/EventService';
 import {ColorPicker} from '../../components/common/ColorPicker';
 import {Icon} from '../../components/common/Icon';
+import {getTranslatedDayName} from '../../utils/date';
 
-interface EventsTabProps {
-    isDark: boolean;
-}
-
-export const EventsTab: React.FC<EventsTabProps> = ({isDark}) => {
+export const EventsTab: React.FC = () => {
+    const {t} = useTranslation();
+    const {isDark} = useApp();
     const [weeks, setWeeks] = useState<Week[]>([]);
     const [selectedWeekId, setSelectedWeekId] = useState<string>('');
     const [days, setDays] = useState<Day[]>([]);
@@ -36,9 +38,11 @@ export const EventsTab: React.FC<EventsTabProps> = ({isDark}) => {
     const [endTime, setEndTime] = useState<string>('10:00');
     const [color, setColor] = useState<string>('#FF6B6B');
 
-    useEffect(() => {
+    useFocusEffect(
+        useCallback(() => {
         loadWeeks();
-    }, []);
+        }, [])
+    );
 
     useEffect(() => {
         if (selectedWeekId) {
@@ -75,7 +79,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({isDark}) => {
 
     const saveEvent = async (): Promise<void> => {
         if (!title.trim() || !selectedDayId) {
-        Alert.alert('Error', 'Completa todos los campos obligatorios');
+        Alert.alert('Error', t('manage.fillRequired'));
         return;
         }
 
@@ -91,16 +95,17 @@ export const EventsTab: React.FC<EventsTabProps> = ({isDark}) => {
         resetForm();
         setIsCreating(false);
         await loadEvents(selectedDayId);
+        Alert.alert('Éxito', t('manage.eventCreated'));
         } catch (error) {
-        Alert.alert('Error', 'No se pudo guardar el evento');
+        Alert.alert('Error', t('manage.eventError'));
         }
     };
 
     const deleteEvent = async (id: string): Promise<void> => {
-        Alert.alert('Confirmar', '¿Eliminar este evento?', [
-        {text: 'Cancelar', style: 'cancel'},
+        Alert.alert(t('manage.confirm'), t('manage.deleteEventConfirm'), [
+        {text: t('manage.cancel'), style: 'cancel'},
         {
-            text: 'Eliminar',
+            text: t('manage.delete'),
             style: 'destructive',
             onPress: async () => {
             await EventService.deleteEvent(id);
@@ -127,7 +132,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({isDark}) => {
     return (
         <ScrollView style={[styles.container, {backgroundColor: bgColor}]}>
         <View style={[styles.selectors, {backgroundColor: cardBg}]}>
-            <Text style={[styles.label, {color: textColor}]}>Semana:</Text>
+            <Text style={[styles.label, {color: textColor}]}>{t('manage.selectWeek')}:</Text>
             <View style={[styles.pickerContainer, {backgroundColor: inputBg}]}>
             <Picker
                 selectedValue={selectedWeekId}
@@ -141,7 +146,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({isDark}) => {
             </Picker>
             </View>
 
-            <Text style={[styles.label, {color: textColor, marginTop: 12}]}>Día:</Text>
+            <Text style={[styles.label, {color: textColor, marginTop: 12}]}>{t('manage.selectDay')}:</Text>
             <View style={[styles.pickerContainer, {backgroundColor: inputBg}]}>
             <Picker
                 selectedValue={selectedDayId}
@@ -150,7 +155,11 @@ export const EventsTab: React.FC<EventsTabProps> = ({isDark}) => {
                 dropdownIconColor={textColor}
             >
                 {days.map((day: Day) => (
-                <Picker.Item key={day.id} label={day.dayName} value={day.id} />
+                <Picker.Item 
+                    key={day.id} 
+                    label={getTranslatedDayName(day.dayName)} 
+                    value={day.id} 
+                />
                 ))}
             </Picker>
             </View>
@@ -159,29 +168,29 @@ export const EventsTab: React.FC<EventsTabProps> = ({isDark}) => {
         {isCreating ? (
             <View style={[styles.form, {backgroundColor: cardBg}]}>
             <Text style={[styles.formTitle, {color: textColor}]}>
-                📝 Nuevo Evento
+                📝 {t('manage.newEvent')}
             </Text>
 
-            <Text style={[styles.label, {color: textColor}]}>Título:</Text>
+            <Text style={[styles.label, {color: textColor}]}>{t('manage.eventTitle')}:</Text>
             <TextInput
                 style={[
                 styles.input,
                 {backgroundColor: inputBg, color: textColor},
                 ]}
-                placeholder="Título del evento"
+                placeholder={t('manage.eventTitle')}
                 placeholderTextColor={subTextColor}
                 value={title}
                 onChangeText={setTitle}
             />
 
-            <Text style={[styles.label, {color: textColor}]}>Descripción:</Text>
+            <Text style={[styles.label, {color: textColor}]}>{t('manage.description')}:</Text>
             <TextInput
                 style={[
                 styles.input,
                 styles.textArea,
                 {backgroundColor: inputBg, color: textColor},
                 ]}
-                placeholder="Descripción opcional"
+                placeholder={t('manage.description')}
                 placeholderTextColor={subTextColor}
                 value={description}
                 onChangeText={setDescription}
@@ -191,7 +200,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({isDark}) => {
 
             <View style={styles.timeContainer}>
                 <View style={styles.timeInput}>
-                <Text style={[styles.label, {color: textColor}]}>Inicio:</Text>
+                <Text style={[styles.label, {color: textColor}]}>{t('manage.startTime')}:</Text>
                 <TextInput
                     style={[
                     styles.input,
@@ -204,7 +213,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({isDark}) => {
                 />
                 </View>
                 <View style={styles.timeInput}>
-                <Text style={[styles.label, {color: textColor}]}>Fin:</Text>
+                <Text style={[styles.label, {color: textColor}]}>{t('manage.endTime')}:</Text>
                 <TextInput
                     style={[
                     styles.input,
@@ -218,7 +227,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({isDark}) => {
                 </View>
             </View>
 
-            <Text style={[styles.label, {color: textColor}]}>Color:</Text>
+            <Text style={[styles.label, {color: textColor}]}>{t('manage.color')}:</Text>
             <ColorPicker initialColor={color} onColorChange={setColor} />
 
             <View style={styles.formButtons}>
@@ -229,13 +238,13 @@ export const EventsTab: React.FC<EventsTabProps> = ({isDark}) => {
                     resetForm();
                 }}
                 >
-                <Text style={styles.buttonText}>Cancelar</Text>
+                <Text style={styles.buttonText}>{t('manage.cancel')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                 style={[styles.button, styles.saveButton]}
                 onPress={saveEvent}
                 >
-                <Text style={styles.buttonText}>Guardar</Text>
+                <Text style={styles.buttonText}>{t('manage.save')}</Text>
                 </TouchableOpacity>
             </View>
             </View>
@@ -246,14 +255,14 @@ export const EventsTab: React.FC<EventsTabProps> = ({isDark}) => {
             >
             <Icon name="➕" size={20} />
             <Text style={[styles.addButtonText, {color: textColor}]}>
-                Nuevo Evento
+                {t('manage.newEvent')}
             </Text>
             </TouchableOpacity>
         )}
 
         <View style={styles.eventsList}>
             <Text style={[styles.sectionTitle, {color: textColor}]}>
-            Eventos del Día
+            {t('manage.dayEvents')}
             </Text>
             {events.map((event: Event) => (
             <View
@@ -279,7 +288,7 @@ export const EventsTab: React.FC<EventsTabProps> = ({isDark}) => {
             ))}
             {events.length === 0 && (
             <Text style={[styles.emptyText, {color: subTextColor}]}>
-                No hay eventos para este día
+                {t('manage.noEvents')}
             </Text>
             )}
         </View>

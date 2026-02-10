@@ -7,6 +7,7 @@ import {
     Animated,
     ScrollView,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
 import {Task} from '../../models/Task';
 import {TaskService} from '../../services/TaskService';
 import {TaskCheckbox} from '../common/TaskCheckbox';
@@ -23,6 +24,7 @@ export const TaskPanel: React.FC<TaskPanelProps> = ({
     isDark,
     onTaskUpdate,
 }) => {
+    const {t} = useTranslation();
     const [expanded, setExpanded] = useState<boolean>(false);
     const [tasks, setTasks] = useState<Task[]>([]);
     const [stats, setStats] = useState<{completed: number; pending: number}>({
@@ -73,15 +75,15 @@ export const TaskPanel: React.FC<TaskPanelProps> = ({
         <TouchableOpacity style={styles.header} onPress={toggleExpand}>
             <View style={styles.titleRow}>
             <Icon name="📋" size={20} />
-            <Text style={[styles.title, {color: textColor}]}>Panel de Tareas</Text>
+            <Text style={[styles.title, {color: textColor}]}>{t('home.tasks')}</Text>
             <Icon name={expanded ? '▼' : '▶'} size={16} color={subTextColor} />
             </View>
             <View style={styles.statsRow}>
             <Text style={[styles.stat, {color: '#10B981'}]}>
-                ✅ Completadas: {stats.completed}
+                ✅ {t('home.completed')}: {stats.completed}
             </Text>
             <Text style={[styles.stat, {color: '#F59E0B'}]}>
-                ⏳ Pendientes: {stats.pending}
+                ⏳ {t('home.pending')}: {stats.pending}
             </Text>
             </View>
         </TouchableOpacity>
@@ -99,7 +101,7 @@ export const TaskPanel: React.FC<TaskPanelProps> = ({
             ))}
             {tasks.length === 0 && (
                 <Text style={[styles.emptyText, {color: subTextColor}]}>
-                No hay tareas pendientes
+                {t('home.noTasks')}
                 </Text>
             )}
             </ScrollView>

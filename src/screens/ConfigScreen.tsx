@@ -10,46 +10,31 @@ import {
 } from 'react-native';
 import {
     launchImageLibrary,
-    launchCamera,
     ImagePickerResponse,
-    CameraOptions,
     ImageLibraryOptions,
 } from 'react-native-image-picker';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useTheme} from '../hooks/useTheme';
-import {useImageColors} from '../hooks/useImageColors';
+import {useTranslation} from 'react-i18next';
+import {useApp} from '../context/AppContext';
 import {Icon} from '../components/common/Icon';
 import {storage, StorageKeys} from '../utils/storage';
 
-type Language = 'es' | 'en';
-
-export interface ConfigScreenProps {
-    isDark: boolean;
-    setIsDark: (value: boolean) => void; 
-}
-
-export const ConfigScreen: React.FC<ConfigScreenProps> = ({
-    isDark,
-    setIsDark,
-}) => {
-    const {themeMode, setThemeMode, isAdaptive, setAdaptiveMode} = useTheme();
-    const {extractColors, palette} = useImageColors();
-    const [language, setLanguage] = useState<Language>('es');
+export const ConfigScreen: React.FC = () => {
+    const {t, i18n} = useTranslation();
+    const {isDark, setThemeMode, themeMode, setLanguage, language} = useApp();
     const [backgroundImage, setBackgroundImage] = useState<string | null>(null);
+    const [isAdaptive, setIsAdaptive] = useState(false);
 
     useEffect(() => {
         loadSettings();
     }, []);
 
     const loadSettings = async (): Promise<void> => {
-        const savedLang = await AsyncStorage.getItem(StorageKeys.LANGUAGE);
         const savedImage = await storage.get(StorageKeys.BACKGROUND_IMAGE);
-        if (savedLang) setLanguage(savedLang as Language);
         if (savedImage) setBackgroundImage(savedImage);
     };
 
-    const selectImage = async (fromCamera: boolean): Promise<void> => {
-        const options: CameraOptions & ImageLibraryOptions = {
+    const selectImage = async (): Promise<void> => {
+        const options: ImageLibraryOptions = {
         mediaType: 'photo',
         quality: 0.8 as 0.8,
         includeBase64: false,
@@ -57,18 +42,12 @@ export const ConfigScreen: React.FC<ConfigScreenProps> = ({
         maxWidth: 2000,
         };
 
-        const result: ImagePickerResponse = fromCamera
-        ? await launchCamera(options)
-        : await launchImageLibrary(options);
+        const result: ImagePickerResponse = await launchImageLibrary(options);
 
         if (result.assets && result.assets[0].uri) {
         const uri: string = result.assets[0].uri;
         setBackgroundImage(uri);
         await storage.set(StorageKeys.BACKGROUND_IMAGE, uri);
-
-        if (isAdaptive) {
-            await extractColors(uri);
-        }
         }
     };
 
@@ -77,20 +56,13 @@ export const ConfigScreen: React.FC<ConfigScreenProps> = ({
         await storage.remove(StorageKeys.BACKGROUND_IMAGE);
     };
 
-    const toggleAdaptive = async (value: boolean): Promise<void> => {
-        await setAdaptiveMode(value);
-        if (value && backgroundImage) {
-        await extractColors(backgroundImage);
-        }
+    const handleChangeLanguage = async (lang: 'es' | 'en') => {
+        await setLanguage(lang);
+        await i18n.changeLanguage(lang);
     };
 
-    const changeLanguage = async (lang: Language): Promise<void> => {
-        setLanguage(lang);
-        await AsyncStorage.setItem(StorageKeys.LANGUAGE, lang);
-    };
-
-    const toggleTheme = (): void => {
-        setIsDark(!isDark);
+    const handleChangeTheme = async (mode: 'light' | 'dark' | 'auto') => {
+        await setThemeMode(mode);
     };
 
     const bgColor: string = isDark ? '#0F172A' : '#F3F4F6';
@@ -101,15 +73,19 @@ export const ConfigScreen: React.FC<ConfigScreenProps> = ({
     return (
         <ScrollView style={[styles.container, {backgroundColor: bgColor}]}>
         <View style={styles.header}>
-            <Text style={[styles.title, {color: textColor}]}>Configuración</Text>
+            <Text style={[styles.title, {color: textColor}]}>
+            {t('config.title')}
+            </Text>
         </View>
 
         <View style={[styles.section, {backgroundColor: cardBg}]}>
-            <Text style={[styles.sectionTitle, {color: textColor}]}>🌐 Idioma</Text>
+            <Text style={[styles.sectionTitle, {color: textColor}]}>
+            🌐 {t('config.language')}
+            </Text>
             <View style={styles.radioGroup}>
             <TouchableOpacity
                 style={styles.radioOption}
-                onPress={() => changeLanguage('es')}
+                onPress={() => handleChangeLanguage('es')}
             >
                 <View
                 style={[
@@ -118,12 +94,12 @@ export const ConfigScreen: React.FC<ConfigScreenProps> = ({
                 ]}
                 />
                 <Text style={[styles.radioLabel, {color: textColor}]}>
-                Español
+                {t('config.spanish')}
                 </Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={styles.radioOption}
-                onPress={() => changeLanguage('en')}
+                onPress={() => handleChangeLanguage('en')}
             >
                 <View
                 style={[
@@ -132,7 +108,7 @@ export const ConfigScreen: React.FC<ConfigScreenProps> = ({
                 ]}
                 />
                 <Text style={[styles.radioLabel, {color: textColor}]}>
-                English
+                {t('config.english')}
                 </Text>
             </TouchableOpacity>
             </View>
@@ -140,7 +116,7 @@ export const ConfigScreen: React.FC<ConfigScreenProps> = ({
 
         <View style={[styles.section, {backgroundColor: cardBg}]}>
             <Text style={[styles.sectionTitle, {color: textColor}]}>
-            🖼️ Fondo de Pantalla
+            🖼️ {t('config.background')}
             </Text>
 
             {backgroundImage && (
@@ -154,36 +130,31 @@ export const ConfigScreen: React.FC<ConfigScreenProps> = ({
             <View style={styles.imageButtons}>
             <TouchableOpacity
                 style={styles.imageButton}
-                onPress={() => selectImage(false)}
+                onPress={selectImage}
             >
                 <Icon name="🖼️" size={20} />
-                <Text style={styles.imageButtonText}>Galería</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={styles.imageButton}
-                onPress={() => selectImage(true)}
-            >
-                <Icon name="📷" size={20} />
-                <Text style={styles.imageButtonText}>Cámara</Text>
+                <Text style={styles.imageButtonText}>{t('config.gallery')}</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 style={[styles.imageButton, styles.defaultButton]}
                 onPress={clearBackground}
             >
                 <Icon name="🔄" size={20} />
-                <Text style={styles.imageButtonText}>Default</Text>
+                <Text style={styles.imageButtonText}>{t('config.default')}</Text>
             </TouchableOpacity>
             </View>
         </View>
 
         <View style={[styles.section, {backgroundColor: cardBg}]}>
-            <Text style={[styles.sectionTitle, {color: textColor}]}>🎨 Tema</Text>
+            <Text style={[styles.sectionTitle, {color: textColor}]}>
+            🎨 {t('config.theme')}
+            </Text>
             <View style={styles.radioGroup}>
             {(['light', 'dark', 'auto'] as const).map((mode) => (
                 <TouchableOpacity
                 key={mode}
                 style={styles.radioOption}
-                onPress={() => setThemeMode(mode)}
+                onPress={() => handleChangeTheme(mode)}
                 >
                 <View
                     style={[
@@ -192,72 +163,38 @@ export const ConfigScreen: React.FC<ConfigScreenProps> = ({
                     ]}
                 />
                 <Text style={[styles.radioLabel, {color: textColor}]}>
-                    {mode === 'light'
-                    ? 'Claro'
-                    : mode === 'dark'
-                        ? 'Oscuro'
-                        : 'Auto'}
+                    {t(`config.${mode}`)}
                 </Text>
                 </TouchableOpacity>
             ))}
             </View>
-            
-            {/* Botón para probar setIsDark */}
-            <TouchableOpacity
-            style={[styles.toggleButton, {backgroundColor: isDark ? '#3B82F6' : '#F59E0B'}]}
-            onPress={toggleTheme}
-            >
-            <Text style={styles.toggleButtonText}>
-                {isDark ? '☀️ Modo Claro' : '🌙 Modo Oscuro'}
-            </Text>
-            </TouchableOpacity>
         </View>
 
         <View style={[styles.section, {backgroundColor: cardBg}]}>
             <View style={styles.row}>
             <View style={styles.adaptiveInfo}>
                 <Text style={[styles.sectionTitle, {color: textColor}]}>
-                ✨ Tema Adaptativo (IA)
+                ✨ {t('config.adaptive')}
                 </Text>
                 <Text style={[styles.adaptiveDesc, {color: subTextColor}]}>
-                Extrae paleta de colores de la imagen de fondo
+                {t('config.adaptiveDesc')}
                 </Text>
             </View>
             <Switch
                 value={isAdaptive}
-                onValueChange={toggleAdaptive}
+                onValueChange={setIsAdaptive}
                 trackColor={{false: '#374151', true: '#3B82F6'}}
                 thumbColor={isAdaptive ? '#FFFFFF' : '#9CA3AF'}
             />
             </View>
-
-            {isAdaptive && palette && (
-            <View style={styles.palettePreview}>
-                <Text style={[styles.paletteTitle, {color: subTextColor}]}>
-                Paleta detectada:
-                </Text>
-                <View style={styles.colorsRow}>
-                <View
-                    style={[styles.colorBox, {backgroundColor: palette.primary}]}
-                />
-                <View
-                    style={[styles.colorBox, {backgroundColor: palette.secondary}]}
-                />
-                <View
-                    style={[styles.colorBox, {backgroundColor: palette.accent}]}
-                />
-                </View>
-            </View>
-            )}
         </View>
 
         <View style={[styles.section, {backgroundColor: cardBg}]}>
-            <Text style={[styles.sectionTitle, {color: textColor}]}>ℹ️ Acerca de</Text>
-            <Text style={[styles.version, {color: subTextColor}]}>
-            Versión 1.0.0 • Offline Mode
+            <Text style={[styles.sectionTitle, {color: textColor}]}>
+            ℹ️ {t('config.about')}
             </Text>
-            <Text style={[styles.credits, {color: subTextColor}]}>
-            React Native CLI + SQLite
+            <Text style={[styles.version, {color: subTextColor}]}>
+            {t('config.version')}
             </Text>
         </View>
         </ScrollView>
@@ -311,17 +248,6 @@ const styles = StyleSheet.create({
     radioLabel: {
         fontSize: 16,
     },
-    toggleButton: {
-        marginTop: 16,
-        padding: 12,
-        borderRadius: 8,
-        alignItems: 'center',
-    },
-    toggleButtonText: {
-        color: '#FFFFFF',
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
     previewImage: {
         width: '100%',
         height: 150,
@@ -361,30 +287,8 @@ const styles = StyleSheet.create({
         fontSize: 12,
         marginTop: 4,
     },
-    palettePreview: {
-        marginTop: 12,
-        paddingTop: 12,
-        borderTopWidth: 1,
-        borderTopColor: '#E5E7EB',
-    },
-    paletteTitle: {
-        fontSize: 12,
-        marginBottom: 8,
-    },
-    colorsRow: {
-        flexDirection: 'row',
-        gap: 8,
-    },
-    colorBox: {
-        width: 40,
-        height: 40,
-        borderRadius: 8,
-    },
     version: {
         fontSize: 14,
         marginBottom: 4,
-    },
-    credits: {
-        fontSize: 12,
     },
 });

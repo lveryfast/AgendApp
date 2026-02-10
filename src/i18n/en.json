@@ -1,15 +1,23 @@
 {
-    "translation": {
-        "home": {
-        "title": "Home",
+    "home": {
         "tasks": "Task Panel",
         "completed": "Completed",
         "pending": "Pending",
         "events": "Today's Events",
         "noEvents": "No events scheduled for today",
-        "noWeek": "No weeks created. Go to Manage to create one."
-        },
-        "manage": {
+        "noWeek": "No weeks created. Go to Manage to create one.",
+        "noTasks": "No pending tasks"
+    },
+    "days": {
+        "monday": "Monday",
+        "tuesday": "Tuesday",
+        "wednesday": "Wednesday",
+        "thursday": "Thursday",
+        "friday": "Friday",
+        "saturday": "Saturday",
+        "sunday": "Sunday"
+    },
+    "manage": {
         "title": "Manage",
         "weeks": "Weeks",
         "events": "Events",
@@ -20,7 +28,6 @@
         "save": "Save",
         "cancel": "Cancel",
         "delete": "Delete",
-        "edit": "Edit",
         "weekTitle": "Week title",
         "eventTitle": "Event title",
         "description": "Description",
@@ -28,16 +35,25 @@
         "endTime": "End",
         "color": "Color",
         "selectWeek": "Select week",
-        "selectDay": "Select day"
-        },
-        "config": {
+        "selectDay": "Select day",
+        "dayEvents": "Day Events",
+        "fillRequired": "Fill all required fields",
+        "eventCreated": "Event created successfully",
+        "eventError": "Could not save event",
+        "taskError": "Could not create task",
+        "confirm": "Confirm",
+        "deleteEventConfirm": "Delete this event?",
+        "deleteTaskConfirm": "Delete this task?",
+        "noEvents": "No events for this day",
+        "total": "Total"
+    },
+    "config": {
         "title": "Settings",
         "language": "Language",
         "spanish": "Spanish",
         "english": "English",
         "background": "Wallpaper",
         "gallery": "Gallery",
-        "camera": "Camera",
         "default": "Default",
         "theme": "Theme",
         "light": "Light",
@@ -47,15 +63,5 @@
         "adaptiveDesc": "Extract color palette from background image",
         "about": "About",
         "version": "Version 1.0.0 • Offline Mode"
-        },
-        "days": {
-        "monday": "Monday",
-        "tuesday": "Tuesday",
-        "wednesday": "Wednesday",
-        "thursday": "Thursday",
-        "friday": "Friday",
-        "saturday": "Saturday",
-        "sunday": "Sunday"
-        }
     }
 }

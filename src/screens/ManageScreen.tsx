@@ -6,17 +6,17 @@ import {
     StyleSheet,
     SafeAreaView,
 } from 'react-native';
+import {useTranslation} from 'react-i18next';
+import {useApp} from '../context/AppContext';
 import {WeeksTab} from './manage/WeeksTab';
 import {EventsTab} from './manage/EventsTab';
 import {TasksTab} from './manage/TasksTab';
 
 type TabType = 'weeks' | 'events' | 'tasks';
 
-interface ManageScreenProps {
-    isDark: boolean;
-}
-
-export const ManageScreen: React.FC<ManageScreenProps> = ({isDark}) => {
+export const ManageScreen: React.FC = () => {
+    const {t} = useTranslation();
+    const {isDark} = useApp();
     const [activeTab, setActiveTab] = useState<TabType>('weeks');
 
     const bgColor: string = isDark ? '#0F172A' : '#F3F4F6';
@@ -25,20 +25,33 @@ export const ManageScreen: React.FC<ManageScreenProps> = ({isDark}) => {
     const renderTab = (): React.ReactElement => {
         switch (activeTab) {
         case 'weeks':
-            return <WeeksTab isDark={isDark} />;
+            return <WeeksTab />;
         case 'events':
-            return <EventsTab isDark={isDark} />;
+            return <EventsTab />;
         case 'tasks':
-            return <TasksTab isDark={isDark} />;
+            return <TasksTab />;
         default:
-            return <WeeksTab isDark={isDark} />;
+            return <WeeksTab />;
+        }
+    };
+
+    const getTabLabel = (tab: TabType): string => {
+        switch (tab) {
+        case 'weeks':
+            return t('manage.weeks');
+        case 'events':
+            return t('manage.events');
+        case 'tasks':
+            return t('manage.tasks');
+        default:
+            return '';
         }
     };
 
     return (
         <SafeAreaView style={[styles.container, {backgroundColor: bgColor}]}>
         <View style={styles.header}>
-            <Text style={[styles.title, {color: textColor}]}>Gestión</Text>
+            <Text style={[styles.title, {color: textColor}]}>{t('manage.title')}</Text>
         </View>
 
         <View style={styles.tabBar}>
@@ -65,7 +78,7 @@ export const ManageScreen: React.FC<ManageScreenProps> = ({isDark}) => {
                     },
                 ]}
                 >
-                {tab === 'weeks' ? 'Semanas' : tab === 'events' ? 'Eventos' : 'Tareas'}
+                {getTabLabel(tab)}
                 </Text>
             </TouchableOpacity>
             ))}

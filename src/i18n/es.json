@@ -1,15 +1,23 @@
 {
-    "translation": {
-        "home": {
-        "title": "Inicio",
+    "home": {
         "tasks": "Panel de Tareas",
         "completed": "Completadas",
         "pending": "Pendientes",
         "events": "Eventos del Día",
         "noEvents": "No hay eventos programados para hoy",
-        "noWeek": "No hay semanas creadas. Ve a Gestión para crear una."
-        },
-        "manage": {
+        "noWeek": "No hay semanas creadas. Ve a Gestión para crear una.",
+        "noTasks": "No hay tareas pendientes"
+    },
+    "days": {
+        "monday": "Lunes",
+        "tuesday": "Martes",
+        "wednesday": "Miércoles",
+        "thursday": "Jueves",
+        "friday": "Viernes",
+        "saturday": "Sábado",
+        "sunday": "Domingo"
+    },
+    "manage": {
         "title": "Gestión",
         "weeks": "Semanas",
         "events": "Eventos",
@@ -20,7 +28,6 @@
         "save": "Guardar",
         "cancel": "Cancelar",
         "delete": "Eliminar",
-        "edit": "Editar",
         "weekTitle": "Título de la semana",
         "eventTitle": "Título del evento",
         "description": "Descripción",
@@ -28,16 +35,25 @@
         "endTime": "Fin",
         "color": "Color",
         "selectWeek": "Seleccionar semana",
-        "selectDay": "Seleccionar día"
-        },
-        "config": {
+        "selectDay": "Seleccionar día",
+        "dayEvents": "Eventos del Día",
+        "fillRequired": "Completa todos los campos obligatorios",
+        "eventCreated": "Evento creado correctamente",
+        "eventError": "No se pudo guardar el evento",
+        "taskError": "No se pudo crear la tarea",
+        "confirm": "Confirmar",
+        "deleteEventConfirm": "¿Eliminar este evento?",
+        "deleteTaskConfirm": "¿Eliminar esta tarea?",
+        "noEvents": "No hay eventos para este día",
+        "total": "Total"
+    },
+    "config": {
         "title": "Configuración",
         "language": "Idioma",
         "spanish": "Español",
         "english": "English",
         "background": "Fondo de Pantalla",
         "gallery": "Galería",
-        "camera": "Cámara",
         "default": "Default",
         "theme": "Tema",
         "light": "Claro",
@@ -47,15 +63,5 @@
         "adaptiveDesc": "Extrae paleta de colores de la imagen de fondo",
         "about": "Acerca de",
         "version": "Versión 1.0.0 • Offline Mode"
-        },
-        "days": {
-        "monday": "Lunes",
-        "tuesday": "Martes",
-        "wednesday": "Miércoles",
-        "thursday": "Jueves",
-        "friday": "Viernes",
-        "saturday": "Sábado",
-        "sunday": "Domingo"
-        }
     }
 }

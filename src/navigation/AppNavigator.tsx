@@ -14,15 +14,7 @@ export type RootTabParamList = {
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
-interface AppNavigatorProps {
-    isDark: boolean;
-    setIsDark: (value: boolean) => void;
-}
-
-export const AppNavigator: React.FC<AppNavigatorProps> = ({
-    isDark,
-    setIsDark,
-}) => {
+export const AppNavigator: React.FC = () => {
     return (
         <NavigationContainer>
         <Tab.Navigator
@@ -31,16 +23,10 @@ export const AppNavigator: React.FC<AppNavigatorProps> = ({
             headerShown: false,
             }}
         >
-            <Tab.Screen name="Home">
-            {() => <HomeScreen isDark={isDark} />}
-            </Tab.Screen>
-            <Tab.Screen name="Gestion">
-            {() => <ManageScreen isDark={isDark} />}
-            </Tab.Screen>
-            <Tab.Screen name="Configuracion">
-            {() => <ConfigScreen isDark={isDark} setIsDark={setIsDark} />}
-            </Tab.Screen>
+            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Gestion" component={ManageScreen} />
+            <Tab.Screen name="Configuracion" component={ConfigScreen} />
         </Tab.Navigator>
         </NavigationContainer>
     );
-}; 
+};

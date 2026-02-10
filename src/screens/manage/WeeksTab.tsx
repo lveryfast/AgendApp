@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useCallback} from 'react';
 import {
     View,
     Text,
@@ -8,26 +8,30 @@ import {
     TextInput,
     Alert,
 } from 'react-native';
+import {useFocusEffect} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
+import {useApp} from '../../context/AppContext';
 import {Week} from '../../models/Week';
 import {Day} from '../../models/Day';
 import {WeekService} from '../../services/WeekService';
 import {DayService} from '../../services/DayService';
 import {Icon} from '../../components/common/Icon';
+import {getTranslatedDayName} from '../../utils/date';
 
-interface WeeksTabProps {
-    isDark: boolean;
-}
-
-export const WeeksTab: React.FC<WeeksTabProps> = ({isDark}) => {
+export const WeeksTab: React.FC = () => {
+    const {t} = useTranslation();
+    const {isDark} = useApp();
     const [weeks, setWeeks] = useState<Week[]>([]);
     const [expandedWeek, setExpandedWeek] = useState<string | null>(null);
     const [weekDays, setWeekDays] = useState<Record<string, Day[]>>({});
     const [newWeekTitle, setNewWeekTitle] = useState<string>('');
     const [isCreating, setIsCreating] = useState<boolean>(false);
 
-    useEffect(() => {
+    useFocusEffect(
+        useCallback(() => {
         loadWeeks();
-    }, []);
+        }, [])
+    );
 
     const loadWeeks = async (): Promise<void> => {
         const data = await WeekService.getAllWeeks();
@@ -77,72 +81,69 @@ export const WeeksTab: React.FC<WeeksTabProps> = ({isDark}) => {
         }
     };
 
-    const renderWeek = useCallback(
-        ({item}: {item: Week}) => {
+    const renderWeek = ({item}: {item: Week}) => {
         const isExpanded: boolean = expandedWeek === item.id;
         const days: Day[] = weekDays[item.id] || [];
 
         return (
-            <View
+        <View
             style={[
-                styles.weekCard,
-                {
+            styles.weekCard,
+            {
                 backgroundColor: isDark ? '#1E293B' : '#FFFFFF',
                 borderColor: isDark ? '#374151' : '#E5E7EB',
-                },
+            },
             ]}
-            >
+        >
             <View style={styles.weekHeader}>
-                <TouchableOpacity
+            <TouchableOpacity
                 style={styles.weekTitleContainer}
                 onPress={() => toggleExpand(item.id)}
-                >
+            >
                 <Icon name={isExpanded ? '📂' : '📁'} size={20} />
                 <Text
-                    style={[
+                style={[
                     styles.weekTitle,
                     {color: isDark ? '#F9FAFB' : '#1F2937'},
-                    ]}
+                ]}
                 >
-                    {item.title}
+                {item.title}
                 </Text>
                 <Icon name={isExpanded ? '▼' : '▶'} size={12} color={isDark ? '#9CA3AF' : '#6B7280'} />
-                </TouchableOpacity>
-                <TouchableOpacity
+            </TouchableOpacity>
+            <TouchableOpacity
                 onPress={() => deleteWeek(item.id)}
                 style={styles.deleteButton}
-                >
+            >
                 <Icon name="🗑️" size={18} />
-                </TouchableOpacity>
+            </TouchableOpacity>
             </View>
 
             {isExpanded && (
-                <View style={styles.daysContainer}>
+            <View style={styles.daysContainer}>
                 {days.map((day: Day) => (
-                    <View
+                <View
                     key={day.id}
                     style={[
-                        styles.dayChip,
-                        {backgroundColor: isDark ? '#0F172A' : '#F3F4F6'},
+                    styles.dayChip,
+                    {backgroundColor: isDark ? '#0F172A' : '#F3F4F6'},
                     ]}
-                    >
+                >
                     <Text
-                        style={[
+                    style={[
                         styles.dayChipText,
                         {color: isDark ? '#E5E7EB' : '#374151'},
-                        ]}
+                    ]}
                     >
-                        {day.dayName}
+                    {getTranslatedDayName(day.dayName)}
                     </Text>
-                    </View>
-                ))}
                 </View>
-            )}
+                ))}
             </View>
+            )}
+        </View>
         );
-        },
-        [expandedWeek, weekDays, isDark],
-    );
+    };
 
     const bgColor: string = isDark ? '#0F172A' : '#F3F4F6';
     const inputBg: string = isDark ? '#374151' : '#FFFFFF';
@@ -162,7 +163,7 @@ export const WeeksTab: React.FC<WeeksTabProps> = ({isDark}) => {
                 styles.input,
                 {backgroundColor: inputBg, color: textColor},
                 ]}
-                placeholder="Título de la semana"
+                placeholder={t('manage.weekTitle')}
                 placeholderTextColor={isDark ? '#9CA3AF' : '#6B7280'}
                 value={newWeekTitle}
                 onChangeText={setNewWeekTitle}
@@ -176,13 +177,13 @@ export const WeeksTab: React.FC<WeeksTabProps> = ({isDark}) => {
                     setNewWeekTitle('');
                 }}
                 >
-                <Text style={styles.buttonText}>Cancelar</Text>
+                <Text style={styles.buttonText}>{t('manage.cancel')}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                 style={[styles.button, styles.saveButton]}
                 onPress={createWeek}
                 >
-                <Text style={styles.buttonText}>Guardar</Text>
+                <Text style={styles.buttonText}>{t('manage.save')}</Text>
                 </TouchableOpacity>
             </View>
             </View>
@@ -196,7 +197,7 @@ export const WeeksTab: React.FC<WeeksTabProps> = ({isDark}) => {
             >
             <Icon name="➕" size={20} />
             <Text style={[styles.addButtonText, {color: textColor}]}>
-                Nueva Semana
+                {t('manage.newWeek')}
             </Text>
             </TouchableOpacity>
         )}
@@ -227,10 +228,6 @@ const styles = StyleSheet.create({
         padding: 16,
         borderRadius: 12,
         elevation: 2,
-        shadowColor: '#000',
-        shadowOffset: {width: 0, height: 2},
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
     },
     addButtonText: {
         fontSize: 16,

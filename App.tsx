@@ -1,15 +1,16 @@
 import React, {useState, useEffect} from 'react';
-import {AppRegistry, StatusBar, View, ActivityIndicator, StyleSheet} from 'react-native';  // ✅ Agregar AppRegistry
+import {StatusBar, View, ActivityIndicator, StyleSheet} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {I18nextProvider} from 'react-i18next';
 import {AppNavigator} from './src/navigation/AppNavigator';
+import {AppProvider, useApp} from './src/context/AppContext';
 import {initDatabase} from './src/database/initDatabase';
 import {runMigrations} from './src/database/migrations';
-import {useTheme} from './src/hooks/useTheme';
-import './src/i18n';
+import i18n from './src/i18n';
 
-const App: React.FC = () => {
+const AppContent: React.FC = () => {
   const [isReady, setIsReady] = useState<boolean>(false);
-  const {isDark} = useTheme();
+  const {isDark} = useApp();
 
   useEffect(() => {
     initializeApp();
@@ -34,12 +35,24 @@ const App: React.FC = () => {
   }
 
   return (
-    <SafeAreaProvider>
+    <>
       <StatusBar
         barStyle={isDark ? 'light-content' : 'dark-content'}
         backgroundColor={isDark ? '#0F172A' : '#F3F4F6'}
       />
-      <AppNavigator isDark={isDark} setIsDark={() => {}} />
+      <AppNavigator />
+    </>
+  );
+};
+
+const App: React.FC = () => {
+  return (
+    <SafeAreaProvider>
+      <I18nextProvider i18n={i18n}>
+        <AppProvider>
+          <AppContent />
+        </AppProvider>
+      </I18nextProvider>
     </SafeAreaProvider>
   );
 };
@@ -51,7 +64,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-AppRegistry.registerComponent('AgendaOffline', () => App);
 
 export default App;

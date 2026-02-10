@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import {
     View,
     Text,
@@ -9,6 +9,9 @@ import {
     Alert,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
+import {useFocusEffect} from '@react-navigation/native';
+import {useTranslation} from 'react-i18next';
+import {useApp} from '../../context/AppContext';
 import {Week} from '../../models/Week';
 import {Task} from '../../models/Task';
 import {WeekService} from '../../services/WeekService';
@@ -16,11 +19,9 @@ import {TaskService} from '../../services/TaskService';
 import {TaskCheckbox} from '../../components/common/TaskCheckbox';
 import {Icon} from '../../components/common/Icon';
 
-interface TasksTabProps {
-    isDark: boolean;
-}
-
-export const TasksTab: React.FC<TasksTabProps> = ({isDark}) => {
+export const TasksTab: React.FC = () => {
+    const {t} = useTranslation();
+    const {isDark} = useApp();
     const [weeks, setWeeks] = useState<Week[]>([]);
     const [selectedWeekId, setSelectedWeekId] = useState<string>('');
     const [tasks, setTasks] = useState<Task[]>([]);
@@ -30,9 +31,11 @@ export const TasksTab: React.FC<TasksTabProps> = ({isDark}) => {
         pending: 0,
     });
 
-    useEffect(() => {
+    useFocusEffect(
+        useCallback(() => {
         loadWeeks();
-    }, []);
+        }, [])
+    );
 
     useEffect(() => {
         if (selectedWeekId) {
@@ -65,7 +68,7 @@ export const TasksTab: React.FC<TasksTabProps> = ({isDark}) => {
         setNewTaskTitle('');
         await loadTasks();
         } catch (error) {
-        Alert.alert('Error', 'No se pudo crear la tarea');
+        Alert.alert('Error', t('manage.taskError'));
         }
     };
 
@@ -76,10 +79,10 @@ export const TasksTab: React.FC<TasksTabProps> = ({isDark}) => {
     };
 
     const deleteTask = async (id: string): Promise<void> => {
-        Alert.alert('Confirmar', '¿Eliminar esta tarea?', [
-        {text: 'Cancelar', style: 'cancel'},
+        Alert.alert(t('manage.confirm'), t('manage.deleteTaskConfirm'), [
+        {text: t('manage.cancel'), style: 'cancel'},
         {
-            text: 'Eliminar',
+            text: t('manage.delete'),
             style: 'destructive',
             onPress: async () => {
             await TaskService.deleteTask(id);
@@ -98,7 +101,7 @@ export const TasksTab: React.FC<TasksTabProps> = ({isDark}) => {
     return (
         <View style={[styles.container, {backgroundColor: bgColor}]}>
         <View style={[styles.selector, {backgroundColor: cardBg}]}>
-            <Text style={[styles.label, {color: textColor}]}>Semana:</Text>
+            <Text style={[styles.label, {color: textColor}]}>{t('manage.selectWeek')}:</Text>
             <View style={[styles.pickerContainer, {backgroundColor: inputBg}]}>
             <Picker
                 selectedValue={selectedWeekId}
@@ -119,7 +122,7 @@ export const TasksTab: React.FC<TasksTabProps> = ({isDark}) => {
                 styles.input,
                 {backgroundColor: inputBg, color: textColor},
             ]}
-            placeholder="Nueva tarea..."
+            placeholder={t('manage.newTask')}
             placeholderTextColor={subTextColor}
             value={newTaskTitle}
             onChangeText={setNewTaskTitle}
@@ -138,7 +141,7 @@ export const TasksTab: React.FC<TasksTabProps> = ({isDark}) => {
             ⏳ {stats.pending}
             </Text>
             <Text style={[styles.statTotal, {color: subTextColor}]}>
-            Total: {stats.completed + stats.pending}
+            {t('manage.total')}: {stats.completed + stats.pending}
             </Text>
         </View>
 
