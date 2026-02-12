@@ -52,15 +52,10 @@
         "language": "Language",
         "spanish": "Spanish",
         "english": "English",
-        "background": "Wallpaper",
-        "gallery": "Gallery",
-        "default": "Default",
         "theme": "Theme",
         "light": "Light",
         "dark": "Dark",
         "auto": "Auto",
-        "adaptive": "Adaptive Theme (AI)",
-        "adaptiveDesc": "Extract color palette from background image",
         "about": "About",
         "version": "Version 1.0.0 • Offline Mode"
     }
