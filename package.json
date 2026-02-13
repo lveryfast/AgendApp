@@ -1,6 +1,7 @@
 {
-  "name": "AgendaReact",
+  "name": "agendapp",
   "version": "1.0.0",
+  "displayName": "AgendApp",
   "private": true,
   "scripts": {
     "android": "react-native run-android",
@@ -49,6 +50,7 @@
     "eslint": "^8.19.0",
     "jest": "^29.6.3",
     "prettier": "2.8.8",
+    "react-native-make": "^1.0.1",
     "react-test-renderer": "18.3.1",
     "typescript": "5.0.4"
   },
