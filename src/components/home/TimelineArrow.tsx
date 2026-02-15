@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
         left: 0,
         flexDirection: 'row',
         alignItems: 'center',
-        transform: [{translateY: -10}], // Centrar verticalmente
+        transform: [{translateY: -10}],
     },
     arrow: {
         width: 0,

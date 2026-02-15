@@ -20,8 +20,6 @@ class NotificationService {
 
     private async initialize() {
         await notifee.requestPermission();
-        
-        // Crear canales de notificación
         await notifee.createChannel({
         id: 'events',
         name: 'Eventos',

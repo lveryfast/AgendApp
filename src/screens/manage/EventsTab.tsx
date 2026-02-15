@@ -31,7 +31,6 @@ export const EventsTab: React.FC = () => {
     const [selectedDayId, setSelectedDayId] = useState<string>('');
     const [events, setEvents] = useState<Event[]>([]);
     const [isCreating, setIsCreating] = useState<boolean>(false);
-
     const [title, setTitle] = useState<string>('');
     const [description, setDescription] = useState<string>('');
     const [startTime, setStartTime] = useState<string>('09:00');

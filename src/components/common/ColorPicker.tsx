@@ -17,7 +17,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({
     const [b, setB] = useState<number>(107);
 
     useEffect(() => {
-        // Parse initial color
         if (initialColor) {
         const cleanHex = initialColor.replace('#', '');
         setR(parseInt(cleanHex.substring(0, 2), 16) || 255);

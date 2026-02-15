@@ -83,7 +83,6 @@ export const ManageScreen: React.FC = () => {
             </TouchableOpacity>
             ))}
         </View>
-
         <View style={styles.content}>{renderTab()}</View>
         </SafeAreaView>
     );

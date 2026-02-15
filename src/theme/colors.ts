@@ -30,5 +30,5 @@ export const Colors = {
     paper: {
         lines: '#E5E7EB',
         background: '#FFFBF0',
-  },
+    },
 };

@@ -12,20 +12,16 @@ import {useApp} from '../context/AppContext';
 export const ConfigScreen: React.FC = () => {
     const {t, i18n} = useTranslation();
     const {isDark, setThemeMode, themeMode, setLanguage, language} = useApp();
-
     const handleChangeLanguage = async (lang: 'es' | 'en') => {
         await setLanguage(lang);
         await i18n.changeLanguage(lang);
     };
-
     const handleChangeTheme = async (mode: 'light' | 'dark' | 'auto') => {
         await setThemeMode(mode);
     };
-
     const bgColor: string = isDark ? '#0F172A' : '#F3F4F6';
     const cardBg: string = isDark ? '#1E293B' : '#FFFFFF';
     const textColor: string = isDark ? '#F9FAFB' : '#1F2937';
-
     return (
         <ScrollView style={[styles.container, {backgroundColor: bgColor}]}>
         <View style={styles.header}>

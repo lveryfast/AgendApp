@@ -194,10 +194,8 @@ const Timeline: React.FC<TimelineProps> = ({events, isDark}) => {
 
     return (
         <View style={styles.timelineWrapper}>
-        {/* Línea de tiempo a la izquierda */}
         <TimelineLine dayProgress={dayProgress} isDark={isDark} />
-        
-        {/* Bloques de tiempo a la derecha */}
+
         <View style={styles.blocksContainer}>
             {timeBlocks.map((block, index) => (
             <TimeBlock
@@ -442,7 +440,6 @@ const styles = StyleSheet.create({
         fontSize: 12,
         opacity: 0.8,
     },
-    // Empty block styles
     emptyBlock: {
         borderRadius: 12,
         marginBottom: 8,

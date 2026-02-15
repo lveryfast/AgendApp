@@ -87,7 +87,7 @@ export const AppProvider: React.FC<{children: React.ReactNode}> = ({children}) =
         >
         {children}
         </AppContext.Provider>
-  );
+    );
 };
 
 export const useApp = () => {

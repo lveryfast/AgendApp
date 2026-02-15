@@ -62,7 +62,6 @@ export const TasksTab: React.FC = () => {
 
     const addTask = async (): Promise<void> => {
         if (!newTaskTitle.trim()) return;
-
         try {
         await TaskService.createTask(selectedWeekId, newTaskTitle.trim());
         setNewTaskTitle('');
@@ -107,8 +106,7 @@ export const TasksTab: React.FC = () => {
                 selectedValue={selectedWeekId}
                 onValueChange={(itemValue: string) => setSelectedWeekId(itemValue)}
                 style={{color: textColor}}
-                dropdownIconColor={textColor}
-            >
+                dropdownIconColor={textColor}>
                 {weeks.map((week: Week) => (
                 <Picker.Item key={week.id} label={week.title} value={week.id} />
                 ))}

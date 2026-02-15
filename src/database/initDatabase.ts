@@ -33,7 +33,6 @@ export const getDatabase = async (): Promise<SQLite.SQLiteDatabase> => {
     return dbInstance;
 };
 
-// Exportar db como getter para compatibilidad
 export const db = {
     executeSql: async (sql: string, params?: any[]): Promise<[SQLite.ResultSet]> => {
         const database = await getDatabase();
@@ -52,7 +51,7 @@ export const db = {
 export const initDatabase = async (): Promise<void> => {
     try {
         const db = await getDatabase();
-
+        
         await db.executeSql(`
             CREATE TABLE IF NOT EXISTS weeks (
                 id TEXT PRIMARY KEY,
