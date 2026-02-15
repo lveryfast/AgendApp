@@ -121,21 +121,37 @@ npm run android
 ## 📂 Estructura del Proyecto
 src/
  ├── components/
+ 
      ├── common/
+     
      ├── home/
+     
      └── navigation/
+     
  ├── context/
+ 
  ├── database/
+ 
  ├── hooks/
+ 
  ├── i18n/
+ 
  ├── models/
+ 
  ├── navigation/
+
  ├── screens/
+
      └── manage/
+     
  ├── services/
+ 
  ├── theme/
+ 
  ├── types/
+ 
  └── utils/
+ 
 
 ### 📱 Plataforma Soportada
 
