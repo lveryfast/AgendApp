@@ -1,10 +1,10 @@
-📱 AgendApp — Gestor de Productividad Móvil
+# 📱 AgendApp — Gestor de Productividad Móvil
 
 AgendApp es una aplicación móvil desarrollada en React Native + TypeScript, enfocada en la gestión eficiente del tiempo, organización semanal, planificación de eventos y control de tareas, todo dentro de una interfaz moderna, fluida y orientada a la productividad.
 
 Este proyecto fue diseñado y construido como un producto funcional real, aplicando buenas prácticas de arquitectura, diseño UI/UX, modularidad y optimización de rendimiento.
 
-🎯 Objetivo del Proyecto
+## 🎯 Objetivo del Proyecto
 
 Crear una aplicación móvil robusta, rápida y minimalista que permita al usuario:
 
@@ -42,7 +42,7 @@ Mantener su productividad sin depender de conexión a internet
 
 🧠 Arquitectura y Enfoque Técnico
 
-La aplicación implementa una arquitectura modular y escalable, separando claramente:
+### La aplicación implementa una arquitectura modular y escalable, separando claramente:
 
 Interfaz de usuario (UI)
 
@@ -54,7 +54,7 @@ Persistencia de datos
 
 Servicios
 
-Principios aplicados:
+### Principios aplicados:
 
 Arquitectura limpia (Clean Architecture adaptada)
 
@@ -66,7 +66,7 @@ Componentes reutilizables
 
 Gestión eficiente del estado
 
-🛠️ Stack Tecnológico
+## 🛠️ Stack Tecnológico
 
 React Native
 
@@ -84,38 +84,60 @@ ESLint + Prettier
 
 Jest
 
-📸 Capturas de Pantalla
+## 📸 Capturas de Pantalla
 
-![Home](./screenshot/Home.jpeg)
-![Gestion/Semanas](./screenshot/Gestion-Semanas.jpeg)
-![Gestion/Eventos](./screenshot/Gestion-Eventos.jpeg)
-![Gestion/Eventos](./screenshot/Gestion-Eventos2.jpeg)
-![Gestion/Tareas](./screenshot/Gestion-Tareas.jpeg)
-![Configuración](./screenshot/configuracion.jpeg)
+### Pantalla Principal
+<p align="center">
+    <img src="./screenshots/Home.jpeg" width="250" />
+</p>
 
-📦 APK de Prueba
+### Gestión
+<p align="center">
+    <img src="./screenshots/Gestion-Semanas.jpeg" width="200" />
+    <img src="./screenshots/Gestion-Eventos.jpeg" width="200" />
+    <img src="./screenshots/Gestion-Eventos2.jpeg" width="200" />
+    <img src="./screenshots/Gestion-Tareas.jpeg" width="200" />
+</p>
+
+### Configuración
+<p align="center">
+    <img src="./screenshots/Configuracion.jpeg" width="250" />
+</p>
+
+
+### 📦 APK de Prueba
 
 El proyecto incluye un APK funcional listo para instalar en Android:
 
-AgendApp.apk
+![AgendApp.apk](./AgendApp.apk)
 
-⚙️ Instalación y Ejecución
+### ⚙️ Instalación y Ejecución
 git clone https://github.com/lveryfast/AgendApp
 cd AgendaReact
 npm install
 npm start
 npm run android
 
-📂 Estructura del Proyecto
+## 📂 Estructura del Proyecto
 src/
  ├── components/
+     ├── common/
+     ├── home/
+     └── navigation/
+ ├── context/
+ ├── database/
+ ├── hooks/
+ ├── i18n/
+ ├── models/
  ├── navigation/
  ├── screens/
+     └── manage/
  ├── services/
- ├── storage/
+ ├── theme/
+ ├── types/
  └── utils/
 
-📱 Plataforma Soportada
+### 📱 Plataforma Soportada
 
 ✅ Android
 
