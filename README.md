@@ -119,38 +119,38 @@ npm start
 npm run android
 
 ## 📂 Estructura del Proyecto
-src/
- ├── components/
- 
-     ├── common/
+    src/
+     ├── components/
      
-     ├── home/
+         ├── common/
+         
+         ├── home/
+         
+         └── navigation/
+         
+     ├── context/
      
-     └── navigation/
+     ├── database/
      
- ├── context/
- 
- ├── database/
- 
- ├── hooks/
- 
- ├── i18n/
- 
- ├── models/
- 
- ├── navigation/
-
- ├── screens/
-
-     └── manage/
+     ├── hooks/
      
- ├── services/
- 
- ├── theme/
- 
- ├── types/
- 
- └── utils/
+     ├── i18n/
+     
+     ├── models/
+     
+     ├── navigation/
+    
+     ├── screens/
+    
+         └── manage/
+         
+     ├── services/
+     
+     ├── theme/
+     
+     ├── types/
+     
+     └── utils/
  
 
 ### 📱 Plataforma Soportada
